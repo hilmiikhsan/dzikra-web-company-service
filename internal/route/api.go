@@ -14,13 +14,13 @@ func SetupRoutes(app *fiber.App) {
 	var (
 		// userAPI       = app.Group("/api/users")
 		superadminAPI = app.Group("/api/superadmin")
-		// publicAPI     = app.Group("/api")
+		publicAPI     = app.Group("/api")
 	)
 
-	productContent.NewProductContentHandler().ProductContentRoute(superadminAPI)
-	faq.NewFAQHandler().FAQRoute(superadminAPI)
-	articleCategory.NewArticleCategoryandler().ArticleCategoryRoute(superadminAPI)
-	article.NewArticleHandler().ArticleRoute(superadminAPI)
+	productContent.NewProductContentHandler().ProductContentRoute(superadminAPI, publicAPI)
+	faq.NewFAQHandler().FAQRoute(superadminAPI, publicAPI)
+	articleCategory.NewArticleCategoryandler().ArticleCategoryRoute(superadminAPI, publicAPI)
+	article.NewArticleHandler().ArticleRoute(superadminAPI, publicAPI)
 
 	// fallback route
 	app.Use(func(c *fiber.Ctx) error {
