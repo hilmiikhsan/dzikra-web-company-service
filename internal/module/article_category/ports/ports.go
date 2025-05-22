@@ -2,6 +2,7 @@ package ports
 
 import (
 	"context"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article_category/dto"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article_category/entity"
@@ -15,6 +16,8 @@ type ArticleCategoryRepository interface {
 	UpdateArticleCategory(ctx context.Context, tx *sqlx.Tx, data *entity.ArticleCategory) (*entity.ArticleCategory, error)
 	SoftDeleteArticleCategoryByID(ctx context.Context, tx *sqlx.Tx, id int) error
 	CountArticleCategoryByID(ctx context.Context, id int) (int, error)
+	CountAll(ctx context.Context) (int64, error)
+	CountByDate(ctx context.Context, start, end time.Time) (int64, error)
 }
 
 type ArticleCategoryService interface {

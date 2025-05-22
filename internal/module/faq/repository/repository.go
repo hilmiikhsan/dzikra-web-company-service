@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/constants"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/faq/dto"
@@ -168,4 +169,28 @@ func (r *faqRepository) SoftDeleteFAQByID(ctx context.Context, tx *sqlx.Tx, id i
 	}
 
 	return nil
+}
+
+func (r *faqRepository) CountAll(ctx context.Context) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountAll)).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountAll - Failed to count all FAQs")
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (r *faqRepository) CountByDate(ctx context.Context, start, end time.Time) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountByDate), start, end).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountByDate - Failed to count FAQs by date")
+		return 0, err
+	}
+
+	return count, nil
 }

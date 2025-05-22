@@ -103,4 +103,14 @@ const (
 		WHERE id = ?
 		AND deleted_at IS NULL
 	`
+
+	queryCountAllArticle = `
+		SELECT COUNT(*) FROM articles WHERE deleted_at IS NULL
+	`
+
+	queryCountByDateArticle = `
+		SELECT COUNT(*) FROM articles 
+		WHERE deleted_at IS NULL 
+		AND created_at BETWEEN ? AND ?
+	`
 )

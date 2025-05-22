@@ -3,6 +3,7 @@ package route
 import (
 	article "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article/handler/rest"
 	articleCategory "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article_category/handler/rest"
+	dashboard "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/dashboard/handler/rest"
 	faq "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/faq/handler/rest"
 	productContent "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/product_content/handler/rest"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/pkg/response"
@@ -21,6 +22,7 @@ func SetupRoutes(app *fiber.App) {
 	faq.NewFAQHandler().FAQRoute(superadminAPI, publicAPI)
 	articleCategory.NewArticleCategoryandler().ArticleCategoryRoute(superadminAPI, publicAPI)
 	article.NewArticleHandler().ArticleRoute(superadminAPI, publicAPI)
+	dashboard.NewDashboardHandler().DashboardRoute(superadminAPI)
 
 	// fallback route
 	app.Use(func(c *fiber.Ctx) error {

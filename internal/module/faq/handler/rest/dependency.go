@@ -30,14 +30,14 @@ func NewFAQHandler() *faqHandler {
 	// repository
 	faqRepository := faqRepository.NewFAQRepository(adapter.Adapters.DzikraPostgres)
 
-	// product  service
-	bannerService := faqService.NewFAQService(
+	// faq service
+	faqService := faqService.NewFAQService(
 		adapter.Adapters.DzikraPostgres,
 		faqRepository,
 	)
 
 	// handler
-	handler.service = bannerService
+	handler.service = faqService
 	handler.middleware = *middlewareHandler
 	handler.validator = validator
 

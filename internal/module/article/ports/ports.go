@@ -2,6 +2,7 @@ package ports
 
 import (
 	"context"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article/dto"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article/entity"
@@ -14,6 +15,8 @@ type ArticleRepository interface {
 	FindArticleByID(ctx context.Context, id int) (*entity.Article, error)
 	FindListArticle(ctx context.Context, limit, offset int, search string) ([]dto.GetListArticle, int, error)
 	SoftDeleteArticleByID(ctx context.Context, tx *sqlx.Tx, id int) error
+	CountAll(ctx context.Context) (int64, error)
+	CountByDate(ctx context.Context, start, end time.Time) (int64, error)
 }
 
 type ArticleService interface {

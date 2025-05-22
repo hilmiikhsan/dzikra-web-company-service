@@ -107,4 +107,14 @@ const (
 			id = ?
 			AND deleted_at IS NULL
 	`
+
+	queryCountAllProductContent = `
+		SELECT COUNT(*) FROM product_contents WHERE deleted_at IS NULL
+	`
+
+	queryCountByDateProductContent = `
+		SELECT COUNT(*) FROM product_contents 
+		WHERE deleted_at IS NULL 
+		AND created_at BETWEEN ? AND ?
+	`
 )

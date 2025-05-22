@@ -2,6 +2,7 @@ package ports
 
 import (
 	"context"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/faq/dto"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/faq/entity"
@@ -14,6 +15,8 @@ type FAQRepository interface {
 	FindFAQByID(ctx context.Context, id int) (*entity.FAQ, error)
 	UpdateFAQ(ctx context.Context, tx *sqlx.Tx, data *entity.FAQ) (*entity.FAQ, error)
 	SoftDeleteFAQByID(ctx context.Context, tx *sqlx.Tx, id int) error
+	CountAll(ctx context.Context) (int64, error)
+	CountByDate(ctx context.Context, start, end time.Time) (int64, error)
 }
 
 type FAQService interface {

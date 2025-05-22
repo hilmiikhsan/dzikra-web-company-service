@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/constants"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/article_category/dto"
@@ -167,6 +168,30 @@ func (r *articleCategoryRepository) CountArticleCategoryByID(ctx context.Context
 	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountArticleCategoryByID), id).Scan(&count)
 	if err != nil {
 		log.Error().Err(err).Msg("repository::CountArticleCategoryByID - Failed to count article category by id")
+		return 0, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+	}
+
+	return count, nil
+}
+
+func (r *articleCategoryRepository) CountAll(ctx context.Context) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountAll)).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountAll - Failed to count all article categories")
+		return 0, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+	}
+
+	return count, nil
+}
+
+func (r *articleCategoryRepository) CountByDate(ctx context.Context, start, end time.Time) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountByDate), start, end).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountByDate - Failed to count article categories by date")
 		return 0, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
 	}
 

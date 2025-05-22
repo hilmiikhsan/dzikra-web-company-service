@@ -41,4 +41,14 @@ const (
 		SELECT COUNT(id) FROM article_categories
 		WHERE id = ? AND deleted_at IS NULL
 	`
+
+	queryCountAll = `
+		SELECT COUNT(*) FROM article_categories WHERE deleted_at IS NULL
+	`
+
+	queryCountByDate = `
+		SELECT COUNT(*) FROM article_categories 
+		WHERE deleted_at IS NULL 
+		AND created_at BETWEEN ? AND ?
+	`
 )

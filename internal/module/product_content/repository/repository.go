@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/constants"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/infrastructure/config"
@@ -182,4 +183,27 @@ func (r *productContentRepository) SoftDeleteProductContentByID(ctx context.Cont
 	}
 
 	return nil
+}
+
+func (r *productContentRepository) CountAll(ctx context.Context) (int64, error) {
+	var total int64
+
+	if err := r.db.GetContext(ctx, &total, r.db.Rebind(queryCountAllProductContent)); err != nil {
+		log.Error().Err(err).Msg("repository::CountAll - error counting product content")
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func (r *productContentRepository) CountByDate(ctx context.Context, start, end time.Time) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountByDateProductContent), start, end).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountByDate - error counting product content by date")
+		return 0, err
+	}
+
+	return count, nil
 }

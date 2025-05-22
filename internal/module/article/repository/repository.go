@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/rs/zerolog/log"
 
@@ -165,4 +166,28 @@ func (r *articleRepository) SoftDeleteArticleByID(ctx context.Context, tx *sqlx.
 	}
 
 	return nil
+}
+
+func (r *articleRepository) CountAll(ctx context.Context) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountAllArticle)).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountAll - error counting articles")
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (r *articleRepository) CountByDate(ctx context.Context, start, end time.Time) (int64, error) {
+	var count int64
+
+	err := r.db.QueryRowContext(ctx, r.db.Rebind(queryCountByDateArticle), start, end).Scan(&count)
+	if err != nil {
+		log.Error().Err(err).Msg("repository::CountByDate - error counting articles by date")
+		return 0, err
+	}
+
+	return count, nil
 }
