@@ -57,4 +57,5 @@ var (
 	ErrInvalidStartDate                    = "Invalid start date format"
 	ErrInvalidEndDate                      = "Invalid end date format"
 	ErrProductContentNotFound              = "Product content not found"
+	ErrFAQNotFound                         = "FAQ not found"
 )

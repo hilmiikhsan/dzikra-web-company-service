@@ -7,6 +7,6 @@ func (h *productContentHandler) ProductContentRoute(superadminRouter fiber.Route
 	superadminRouter.Post("/product-content/create", h.middleware.AuthBearer, h.middleware.RBACMiddleware("create", "product_content"), h.createProductContent)
 	superadminRouter.Get("/product-content", h.middleware.AuthBearer, h.middleware.RBACMiddleware("read", "product_content"), h.getListProductContent)
 	superadminRouter.Patch("/product-content/update/:product_id", h.middleware.AuthBearer, h.middleware.RBACMiddleware("update", "product_content"), h.updateProductContent)
-	superadminRouter.Delete("/product-content/remove/:product_id", h.middleware.AuthBearer, h.middleware.RBACMiddleware("read", "product_content"), h.removeProductContent)
-	superadminRouter.Get("/product-content/:product_id", h.middleware.AuthBearer, h.getDetailProductContent)
+	superadminRouter.Delete("/product-content/remove/:product_id", h.middleware.AuthBearer, h.middleware.RBACMiddleware("delete", "product_content"), h.removeProductContent)
+	superadminRouter.Get("/product-content/:product_id", h.middleware.AuthBearer, h.middleware.AuthBearer, h.middleware.RBACMiddleware("read", "product_content"), h.getDetailProductContent)
 }

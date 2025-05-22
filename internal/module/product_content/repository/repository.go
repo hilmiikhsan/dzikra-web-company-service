@@ -51,7 +51,7 @@ func (r *productContentRepository) InsertNewProductContent(ctx context.Context, 
 		&res.CreatedAt,
 	)
 	if err != nil {
-		log.Error().Err(err).Any("payload", data).Msg("repository::ContentID - Failed to insert new product content")
+		log.Error().Err(err).Any("payload", data).Msg("repository::InsertNewProductContent - Failed to insert new product content")
 		return nil, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
 	}
 
@@ -77,7 +77,7 @@ func (r *productContentRepository) FindListProductContent(ctx context.Context, l
 	}
 
 	if err := r.db.GetContext(ctx, &total, r.db.Rebind(queryCountFindListProductContent), countArgs...); err != nil {
-		log.Error().Err(err).Msg("repository::FindListProductContent - error counting banner")
+		log.Error().Err(err).Msg("repository::FindListProductContent - error counting product content")
 		return nil, 0, err
 	}
 

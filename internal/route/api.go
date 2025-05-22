@@ -1,6 +1,7 @@
 package route
 
 import (
+	faq "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/faq/handler/rest"
 	productContent "github.com/Digitalkeun-Creative/be-dzikra-web-company-service/internal/module/product_content/handler/rest"
 	"github.com/Digitalkeun-Creative/be-dzikra-web-company-service/pkg/response"
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,7 @@ func SetupRoutes(app *fiber.App) {
 	)
 
 	productContent.NewProductContentHandler().ProductContentRoute(superadminAPI)
+	faq.NewFAQHandler().FAQRoute(superadminAPI)
 
 	// fallback route
 	app.Use(func(c *fiber.Ctx) error {
