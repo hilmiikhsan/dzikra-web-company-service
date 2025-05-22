@@ -136,7 +136,7 @@ func (r *faqRepository) UpdateFAQ(ctx context.Context, tx *sqlx.Tx, data *entity
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			errMessage := fmt.Errorf("repository::UpdateFAQ - address with id %d is not found", data.ID)
+			errMessage := fmt.Errorf("repository::UpdateFAQ - faq with id %d is not found", data.ID)
 			log.Error().Err(err).Msg(errMessage.Error())
 			return nil, errors.New(constants.ErrFAQNotFound)
 		}

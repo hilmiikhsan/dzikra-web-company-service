@@ -42,7 +42,7 @@ func (h *productContentHandler) createProductContent(c *fiber.Ctx) error {
 	}
 
 	if err := h.validator.Validate(req); err != nil {
-		log.Warn().Err(err).Msg("handler::createAddress - Invalid request body")
+		log.Warn().Err(err).Msg("handler::createProductContent - Invalid request body")
 		code, errs := err_msg.Errors(err, req)
 		return c.Status(code).JSON(response.Error(errs))
 	}
@@ -186,23 +186,28 @@ func (h *productContentHandler) updateProductContent(c *fiber.Ctx) error {
 		if len(files) == 1 {
 			fh := files[0]
 			if fh.Size > constants.MaxFileSize {
+				log.Error().Msg("handler::updateProductContent - File size exceeds limit")
 				return c.Status(fiber.StatusBadRequest).JSON(response.Error("File size exceeds limit"))
 			}
 			ext := strings.ToLower(filepath.Ext(fh.Filename))
 			if !constants.AllowedImageExtensions[ext] {
+				log.Error().Msg("handler::updateProductContent - Invalid file extension")
 				return c.Status(fiber.StatusBadRequest).JSON(response.Error("Invalid file extension"))
 			}
 			f, err := fh.Open()
 			if err != nil {
+				log.Error().Err(err).Msg("handler::updateProductContent - Failed to open file")
 				return c.Status(fiber.StatusInternalServerError).JSON(response.Error("Internal server error"))
 			}
 			defer f.Close()
 			data, err := io.ReadAll(f)
 			if err != nil {
+				log.Error().Err(err).Msg("handler::updateProductContent - Failed to read file")
 				return c.Status(fiber.StatusInternalServerError).JSON(response.Error("Internal server error"))
 			}
 			mime := http.DetectContentType(data)
 			if !strings.HasPrefix(mime, "image/") {
+				log.Error().Msg("handler::updateProductContent - Uploaded file is not a valid image")
 				return c.Status(fiber.StatusBadRequest).JSON(response.Error("Uploaded file is not a valid image"))
 			}
 			objectName := "product_content_images/" + utils.GenerateBucketFileUUID() + ext

@@ -58,4 +58,7 @@ var (
 	ErrInvalidEndDate                      = "Invalid end date format"
 	ErrProductContentNotFound              = "Product content not found"
 	ErrFAQNotFound                         = "FAQ not found"
+	ErrArticleCategoryAlreadyRegistered    = "Article category already registered"
+	ErrArticleCategoryNotFound             = "Article category not found"
+	ErrArticleNotFound                     = "Article not found"
 )

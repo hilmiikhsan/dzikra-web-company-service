@@ -141,11 +141,15 @@ func (s *productContentService) UpdateProductContent(ctx context.Context, payloa
 		return nil, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
 	}
 
-	if productContentResult.Images != "" {
-		// delete old banner image
-		if err := s.minioService.DeleteFile(ctx, productContentResult.Images); err != nil {
-			log.Error().Err(err).Msg("service::UpdateBanner - Failed to delete old product content image")
-			return nil, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+	if payloadFile != nil {
+		ext := strings.ToLower(filepath.Ext(payloadFile.Filename))
+		objectName = fmt.Sprintf("product_content_images/%s%s", utils.GenerateBucketFileUUID(), ext)
+
+		if productContentResult.Images != "" {
+			if err := s.minioService.DeleteFile(ctx, productContentResult.Images); err != nil {
+				log.Error().Err(err).Msg("service::UpdateProductContent - Failed to delete old product content image")
+				return nil, err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+			}
 		}
 	}
 
@@ -170,6 +174,7 @@ func (s *productContentService) UpdateProductContent(ctx context.Context, payloa
 		ContentEn:   contentEn,
 		SellLink:    sellLink,
 		WebLink:     webLink,
+		Images:      productContentResult.Images,
 	}
 
 	if objectName != "" {
@@ -220,6 +225,16 @@ func (s *productContentService) UpdateProductContent(ctx context.Context, payloa
 }
 
 func (s *productContentService) RemoveProductContent(ctx context.Context, id int) error {
+	prodctContent, err := s.productContentRepository.FindProductContentByID(ctx, id)
+	if err != nil {
+		if strings.Contains(err.Error(), constants.ErrProductContentNotFound) {
+			log.Error().Err(err).Msg("service::RemoveProductContent - product content not found")
+			return err_msg.NewCustomErrors(fiber.StatusNotFound, err_msg.WithMessage(constants.ErrProductContentNotFound))
+		}
+		log.Error().Err(err).Msg("service::RemoveProductContent - error getting product content")
+		return err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+	}
+
 	// Begin transaction
 	tx, err := s.db.Beginx()
 	if err != nil {
@@ -243,6 +258,13 @@ func (s *productContentService) RemoveProductContent(ctx context.Context, id int
 
 		log.Error().Err(err).Msg("service::RemoveProductContent - Failed to soft delete product content")
 		return err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+	}
+
+	if prodctContent.Images != "" {
+		if err := s.minioService.DeleteFile(ctx, prodctContent.Images); err != nil {
+			log.Error().Err(err).Msg("service::RemoveArticle - Failed to delete article image")
+			return err_msg.NewCustomErrors(fiber.StatusInternalServerError, err_msg.WithMessage(constants.ErrInternalServerError))
+		}
 	}
 
 	// commit transaction

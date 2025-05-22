@@ -62,7 +62,7 @@ func (h *faqHandler) getDetailFAQ(c *fiber.Ctx) error {
 	)
 
 	if id == "" {
-		log.Warn().Msg("handler::removeProductContent - Product Content ID is required")
+		log.Warn().Msg("handler::getDetailFAQ - Product Content ID is required")
 		return c.Status(fiber.StatusBadRequest).JSON(response.Error("Product Content ID is required"))
 	}
 

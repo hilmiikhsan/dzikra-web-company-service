@@ -123,7 +123,7 @@ func (r *productContentRepository) UpdateProductContent(ctx context.Context, tx 
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			errMessage := fmt.Errorf("repository::UpdateProductContent - address with id %d is not found", data.ID)
+			errMessage := fmt.Errorf("repository::UpdateProductContent - product content with id %d is not found", data.ID)
 			log.Error().Err(err).Msg(errMessage.Error())
 			return nil, errors.New(constants.ErrProductContentNotFound)
 		}
